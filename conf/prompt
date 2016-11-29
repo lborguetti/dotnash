@@ -12,6 +12,9 @@ fn updatePrompt() {
 	PROMPT = $DEFPROMPT
 	IFS    = ""
 
+	GETCURDIR <= pwd | sed -e "s@"+$HOME+"@~@g"
+	CURDIR = $NASH_BLUE+$GETCURDIR+$NASH_RESET
+
 	-test -d ./.git
 
 	if $status == "0" {
@@ -24,9 +27,9 @@ fn updatePrompt() {
 			PROMPT = $NASH_GREEN+"git:("+$branch+$NASH_RESET+")"+$DEFPROMPT
 		}
 	} else {
-		datetime <= date "+%d/%m/%Y %H:%M:%S"
+		datetime <= date "+%H:%M:%S"
 
-		PROMPT = $NASH_GREEN+"("+$datetime+")"+$DEFPROMPT
+		PROMPT = $NASH_GREEN+"[«"+$NASH_RESET+$datetime+" "+$CURDIR+$NASH_GREEN+"»]"+$DEFPROMPT
 	}
 
 	setenv PROMPT
