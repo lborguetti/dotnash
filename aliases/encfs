@@ -1,0 +1,18 @@
+# encfs alias
+
+fn encfs_mount(){
+
+    encfs $HOME+"/Dropbox/Work/" $HOME+"/Private/"
+
+}
+
+fn encfs_umount(){
+
+    fusermount -u $HOME+"/Private/"
+
+}
+
+bindfn encfs_mount encfs_mount
+bindfn encfs_umount encfs_umount
+
+
