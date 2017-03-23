@@ -1,14 +1,14 @@
 # Setup environment variables
 
-GOVERSION     = "go1.7"
-PLAN9         = $HOME+"/projects/github/plan9port/"
-GOPATH        = $HOME+"/projects/go-workspace"
+GOVERSION     = "go1.8"
+PLAN9         = $HOME+"/projects/plan9port/"
+GOPATH        = $HOME+"/projects/"+$GOVERSION+"-workspace"
 LBIN          = $HOME+"/bin"
 FZFPATH       = $HOME+"/.fzf"
-GOROOT        = $HOME+"/projects/github/go"
+GOROOT        = "/usr/local/go/"
 CDPATH        = ($HOME $GOPATH+"/src")
 LANG          = "en_US.UTF-8"
-ENCFS6_CONFIG = "/data/Home/.encfs6.xml"
+ENCFS6_CONFIG = "/home/luciano/.encfs6.xml"
 PATH          = ""
 paths = (
 	"/bin"
