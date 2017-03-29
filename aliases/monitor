@@ -1,0 +1,12 @@
+# monitor alias
+
+fn monitor_on() {
+	xrandr --output HDMI1 --above eDP1 --output eDP1 --primary
+}
+
+fn monitor_off() {
+	xrandr --output HDMI1 --off --output eDP1 --primary
+}
+
+bindfn monitor_on monitor_on
+bindfn monitor_off monitor_off
