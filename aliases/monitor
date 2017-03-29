@@ -1,7 +1,7 @@
 # monitor alias
 
 fn monitor_on() {
-	xrandr --output HDMI1 --above eDP1 --output eDP1 --primary
+	xrandr --output HDMI1 --auto --above eDP1 --output eDP1 --primary
 }
 
 fn monitor_off() {
