@@ -10,26 +10,36 @@ setenv PROMPT
 
 fn updatePrompt() {
 	PROMPT = $DEFPROMPT
-	IFS    = ""
 
-	GETCURDIR <= pwd | sed -e "s@"+$HOME+"@~@g"
-	CURDIR = $NASH_BLUE+$GETCURDIR+$NASH_RESET
-
-	-test -d ./.git
+	current_dir, status <= pwd | sed -e "s@"+$HOME+"@~@g;s@/data/Home@~@g;s@/data/Work@~/Work@g"
 
 	if $status == "0" {
-		branch <= -git rev-parse --abbrev-ref HEAD >[2=]
+		current_dir = $NASH_BLUE+$current_dir+$NASH_RESET
+	} else {
+		exit("1")
+	}
 
+	branch, status <= git rev-parse --abbrev-ref HEAD >[2=]
+
+	if $status == "0" {
+		out, status <= test -d ./.git
+		
 		if $status == "0" {
-			# workaround nash issue #96
-			branch <= echo -n $branch | xargs echo -n
-
-			PROMPT = $NASH_GREEN+"git:("+$branch+$NASH_RESET+")"+$DEFPROMPT
+			_pwd, status <= pwd
+			_current_dir <= basename $_pwd
+			
+			current_dir  = $NASH_BLUE+$_current_dir+$NASH_RESET
 		}
+		
+		# workaround nash issue #96
+		branch <= echo -n $branch | xargs echo -n
+		
+		git_prompt = "git:("+$NASH_RESET+$NASH_RED+$branch+$NASH_RESET+" "+$current_dir+")"
+		PROMPT     = $NASH_GREEN+"[«"+$NASH_RESET+$git_prompt+$NASH_GREEN+"»]"+$DEFPROMPT
 	} else {
 		datetime <= date "+%H:%M:%S"
-
-		PROMPT = $NASH_GREEN+"[«"+$NASH_RESET+$datetime+" "+$CURDIR+$NASH_GREEN+"»]"+$DEFPROMPT
+		
+		PROMPT = $NASH_GREEN+"[«"+$NASH_RESET+$datetime+" "+$current_dir+$NASH_GREEN+"»]"+$DEFPROMPT
 	}
 
 	setenv PROMPT

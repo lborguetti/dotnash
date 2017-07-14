@@ -1,8 +1,7 @@
 # cd alias
-#
+
 # cd overrides built-in cd
 # looks for directories in CDPATH variable
-
 fn __docd(path) {
 	chdir($path)
 }
