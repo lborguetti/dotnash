@@ -1,0 +1,7 @@
+# pbpaste alias
+
+fn pbpaste() {
+	xsel --clipboard --output
+}
+
+bindfn pbpaste pbpaste
