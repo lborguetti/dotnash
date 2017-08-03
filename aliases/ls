@@ -1,7 +1,63 @@
 # ls alias
 
-fn ls() {
-        ls --color=auto -aF
+fn l() {
+    ls --group-directories-first --color=auto
 }
 
-bindfn ls lsa
+bindfn l l
+
+# long listing format plus print human readable sizes
+fn ll() {
+    ls --group-directories-first --color=auto -lh
+}
+
+bindfn ll ll
+
+# long listing format, print human readable sizes plus almost all
+fn la() {
+    ls --group-directories-first --color=auto -lhA
+}
+
+bindfn la la
+
+# long listing format, print human readable sizes plus recursive
+fn lr() {
+    ls --group-directories-first --color=auto -lhR
+}
+
+bindfn lr lr
+
+# long listing format, print human readable sizes plus sort by modification time
+fn lt() {
+    ls --group-directories-first --color=auto -lhtr
+}
+
+bindfn lt lt
+
+# long listing format, print human readable sizes plus sort by the change time
+fn lc() {
+    ls --group-directories-first --color=auto -lhtrc
+}
+
+bindfn lc lc
+
+# long listing format, print human readable sizes plus sort by file size
+fn lc() {
+    ls --group-directories-first --color=auto -lhSr
+}
+
+bindfn lc lc
+
+# long listing format, print human readable sizes plus sort by file size
+fn lc() {
+    ls --group-directories-first --color=auto -lhSr
+}
+
+bindfn lc lc
+
+# long listing format, print human readable sizes plus almost all with pager
+fn lm() {
+    ls --group-directories-first --color=auto -lhA | less
+}
+
+bindfn lm lm
