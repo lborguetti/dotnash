@@ -2,44 +2,56 @@
 
 # PROMPT is a special variable used by nash command line to
 # setup your prompt.
-PROMPTSYM = "λ> "
-DEFPROMPT = $NASH_RED+$PROMPTSYM+$NASH_RESET
+DEFPROMPT = $NASH_FG_LRED+"❯"+$NASH_FG_LYELLOW+"❯"+$NASH_FG_LGREEN+"❯ "+$NASH_RESET
 PROMPT    = $DEFPROMPT
 
 setenv PROMPT
 
 fn updatePrompt() {
-	PROMPT = $DEFPROMPT
-
 	current_dir, status <= pwd | sed -e "s@"+$HOME+"@~@g;s@/data/Home@~@g;s@/data/Work@~/Work@g"
 
 	if $status == "0" {
-		current_dir = $NASH_BLUE+$current_dir+$NASH_RESET
-	} else {
-		exit("1")
+		out       <= split($current_dir, "/")
+		len_out   <= len($out)
+		_, status <= test $len_out -ge "3"
+
+		if $status == "0" {
+			current_dir = ""
+
+			last_cut <= expr $len_out - 2
+			seq      <= seq 0 $last_cut
+			range    <= split($seq, "\n")
+
+			for r in $range {
+				_, status <= echo $out[$r] | grep "^\\."
+
+				if $status == "0" {
+					dir <= echo $out[$r] | cut -c 1-2
+				} else {
+					dir <= echo $out[$r] | cut -c 1
+				}
+
+				current_dir = $current_dir+$dir+"/"
+			}
+
+			last <= expr $len_out - 1
+
+			current_dir = $current_dir+$out[$last]
+		}
+
+		current_dir = $NASH_FG_LBLUE+$current_dir+$NASH_RESET
 	}
 
 	branch, status <= git rev-parse --abbrev-ref HEAD >[2=]
 
 	if $status == "0" {
-		out, status <= test -d ./.git
-		
-		if $status == "0" {
-			_pwd, status <= pwd
-			_current_dir <= basename $_pwd
-			
-			current_dir  = $NASH_BLUE+$_current_dir+$NASH_RESET
-		}
-		
 		# workaround nash issue #96
 		branch <= echo -n $branch | xargs echo -n
-		
-		git_prompt = "git:("+$NASH_RESET+$NASH_RED+$branch+$NASH_RESET+" "+$current_dir+")"
-		PROMPT     = $NASH_GREEN+"[«"+$NASH_RESET+$git_prompt+$NASH_GREEN+"»]"+$DEFPROMPT
+
+		git_prompt = "git:("+$NASH_RED+$branch+$NASH_RESET+")"
+		PROMPT     = $current_dir+" "+$git_prompt+" "+$DEFPROMPT
 	} else {
-		datetime <= date "+%H:%M:%S"
-		
-		PROMPT = $NASH_GREEN+"[«"+$NASH_RESET+$datetime+" "+$current_dir+$NASH_GREEN+"»]"+$DEFPROMPT
+		PROMPT = $current_dir+" "+$DEFPROMPT
 	}
 
 	setenv PROMPT
