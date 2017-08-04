@@ -1,10 +1,14 @@
+#!/usr/bin/env nash
+
+#
 # pbcopy alias
+#
 
 fn pbcopy(filename) {
 	current_dir, status <= pwd
 
 	if $status != "0" {
-		exit("1")
+		return
 	}
 
 	file = $current_dir+"/"+$filename

@@ -1,14 +1,32 @@
-# Download any required dependencies
+#!/usr/bin/env nash
 
-fn getnashlib() {
-	-test -d $NASHPATH+"/lib/nashlib"
+#
+# Download any required dependencies
+#
+
+fn getnashcomplete() {
+	_, status <= test -d $NASHPATH+"/lib/nashcomplete"
 
 	if $status != "0" {
-		# After install nashlib, you can use color variables instead of
-		# adding explicit ANSI escape sequences...
-		echo "[31m» nashlib not installed[0m"
-		echo "[32m» Trying to download dependencies...[0m"
-		-mkdir -p $NASHPATH+"/lib"
+		echo "nashcomplete not installed"
+		echo "Trying to download dependencies..."
+		mkdir -p $NASHPATH+"/lib"
+
+		chdir($NASHPATH+"/lib")
+
+    git clone https://github.com/NeowayLabs/nashcomplete.git
+
+		chdir($HOME)
+	}
+}
+
+fn getnashlib() {
+	_, status <= test -d $NASHPATH+"/lib/nashlib"
+
+	if $status != "0" {
+		echo "nashlib not installed"
+		echo "Trying to download dependencies..."
+		mkdir -p $NASHPATH+"/lib"
 
 		chdir($NASHPATH+"/lib")
 
@@ -19,7 +37,7 @@ fn getnashlib() {
 }
 
 fn getfzf() {
-	-test -d $HOME+"/.fzf"
+	_, status <= test -d $HOME+"/.fzf"
 
 	if $status != "0" {
 		echo "fzf fuzzy finder not installed."
@@ -32,5 +50,6 @@ fn getfzf() {
 	}
 }
 
+getnashcomplete()
 getnashlib()
 getfzf()

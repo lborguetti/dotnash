@@ -1,21 +1,26 @@
+#!/usr/bin/env nash
+
+#
 # Some golang helpers
+#
 
 # syntax sugar to cd into go project
 fn gocd(path) {
 	chdir($GOPATH+"/src/"+$path)
 }
 
+bindfn gocd gocd
+
 fn gomk(path) {
 	mkpath = $GOPATH+"/src/"+$path
 
-	out, status <= test -d $mkpath
+	_, status <= test -d $mkpath
 
 	if $status != "0" {
 		mkdir -p $mkpath
 		echo "Directory created: "+$mkpath
-		gocd path
+		gocd $path
 	}
 }
 
-bindfn gocd gocd
 bindfn gomk gomk

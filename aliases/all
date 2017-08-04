@@ -1,5 +1,8 @@
+#!/usr/bin/env nash
 
+#
 # import all my aliases
+#
 
 import "cd"
 import "ls"

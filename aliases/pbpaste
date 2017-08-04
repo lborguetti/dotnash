@@ -1,4 +1,8 @@
+#!/usr/bin/env nash
+
+#
 # pbpaste alias
+#
 
 fn pbpaste() {
 	xsel --clipboard --output

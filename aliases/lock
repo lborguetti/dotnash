@@ -1,9 +1,11 @@
+#!/usr/bin/env nash
+
+#
 # lock alias
+#
 
-fn lock(){
-
-    i3lock -c 000000
-
+fn lock() {
+	i3lock -c 000000
 }
 
 bindfn lock lock
