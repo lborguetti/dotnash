@@ -39,21 +39,20 @@ fn gcheck(branch) {
 			fzf --header "Select the branch: " |
 			xargs echo -n
 		)
-
+		
 		git checkout $branch
 	} else {
 		branchs <= git branch | sed "s/^[* \\t]*//g"
-
 		branchs <= split($branchs, "\n")
-
+		
 		for b in $branchs {
 			if $b == $branch {
 				git checkout $branch
-
+				
 				return
 			}
 		}
-
+		
 		git checkout -b $branch
 	}
 

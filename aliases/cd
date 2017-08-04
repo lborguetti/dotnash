@@ -11,7 +11,7 @@ fn __docd(path) {
 fn cd(path) {
 	if $path == "" {
 		__docd($HOME)
-
+		
 		return
 	}
 
@@ -19,25 +19,25 @@ fn cd(path) {
 
 	if $status != "0" {
 		pwd <= pwd | tr -d "\n"
-
+		
 		newpath = $pwd+"/"+$path
-
+		
 		_, status <= test -d $newpath
-
+		
 		if $status == "0" {
 			__docd($newpath)
-
+			
 			return
 		}
-
+		
 		for prefix in $CDPATH {
 			newpath = $prefix+"/"+$path
-
+		
 			_, status <= test -d $newpath
-
+		
 			if $status == "0" {
 				__docd($newpath)
-
+				
 				return
 			}
 		}

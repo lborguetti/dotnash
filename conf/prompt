@@ -4,8 +4,7 @@
 # PROMPT: is a special variable used by nash command  line to setup your prompt.
 #
 defprompt = $NASH_FG_LRED+"❯"+$NASH_FG_LYELLOW+"❯"+$NASH_FG_LGREEN+"❯ "+$NASH_RESET
-
-PROMPT = $defprompt
+PROMPT    = $defprompt
 
 setenv PROMPT
 
@@ -13,35 +12,34 @@ fn updatePrompt() {
 	current_dir, status <= pwd | sed -e "s@"+$HOME+"@~@g;s@/data/Home@~@g;s@/data/Work@~/Work@g"
 
 	if $status == "0" {
-		out <= split($current_dir, "/")
-		len_out <= len($out)
+		out       <= split($current_dir, "/")
+		len_out   <= len($out)
 		_, status <= test $len_out -ge "3"
-
+		
 		if $status == "0" {
 			current_dir = ""
-
-
+			
 			last_cut <= expr $len_out - 2
-			seq <= seq 0 $last_cut
-			range <= split($seq, "\n")
-
+			seq      <= seq 0 $last_cut
+			range    <= split($seq, "\n")
+			
 			for r in $range {
 				_, status <= echo $out[$r] | grep "^\\."
-
+			
 				if $status == "0" {
 					dir <= echo $out[$r] | cut -c 1-2
 				} else {
 					dir <= echo $out[$r] | cut -c 1
 				}
-
+			
 				current_dir = $current_dir+$dir+"/"
 			}
-
+			
 			last <= expr $len_out - 1
-
+			
 			current_dir = $current_dir+$out[$last]
 		}
-
+		
 		current_dir = $NASH_FG_LBLUE+$current_dir+$NASH_RESET
 	}
 
@@ -49,7 +47,7 @@ fn updatePrompt() {
 
 	if $status == "0" {
 		git_prompt = "git:("+$NASH_RED+$branch+$NASH_RESET+")"
-		prompt = $current_dir+" "+$git_prompt+" "+$defprompt
+		prompt     = $current_dir+" "+$git_prompt+" "+$defprompt
 	} else {
 		prompt = $current_dir+" "+$defprompt
 	}

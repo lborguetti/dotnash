@@ -11,11 +11,11 @@ fn getnashcomplete() {
 		echo "nashcomplete not installed"
 		echo "Trying to download dependencies..."
 		mkdir -p $NASHPATH+"/lib"
-
+		
 		chdir($NASHPATH+"/lib")
-
-    git clone https://github.com/NeowayLabs/nashcomplete.git
-
+		
+		git clone https://github.com/NeowayLabs/nashcomplete.git
+		
 		chdir($HOME)
 	}
 }
@@ -27,11 +27,11 @@ fn getnashlib() {
 		echo "nashlib not installed"
 		echo "Trying to download dependencies..."
 		mkdir -p $NASHPATH+"/lib"
-
+		
 		chdir($NASHPATH+"/lib")
-
+		
 		git clone https://github.com/NeowayLabs/nashlib.git
-
+		
 		chdir($HOME)
 	}
 }
@@ -42,9 +42,9 @@ fn getfzf() {
 	if $status != "0" {
 		echo "fzf fuzzy finder not installed."
 		echo "Installing fzf..."
-
+		
 		chdir($HOME)
-
+		
 		git clone --depth 1 https://github.com/junegunn/fzf.git .fzf
 		./.fzf/install --all >[1=] >[2=]
 	}
