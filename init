@@ -2,7 +2,8 @@
 
 import "conf/deps"
 import "nashlib/all"
+import "nashcomplete/all"
 import "conf/env"
-import "aliases/all"
-import "conf/complete"
 import "conf/prompt"
+import "aliases/all"
+import "autocomplete/init"

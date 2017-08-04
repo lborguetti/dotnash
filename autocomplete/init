@@ -1,0 +1,17 @@
+#!/usr/bin/env nash
+
+#
+# auto complete
+#
+
+import "modules/docker"
+import "modules/ssh"
+import "modules/make"
+
+dockercomplete   = ("docker" $docker_complete)
+sshcomplete      = ("ssh" $ssh_complete)
+makecomplete     = ("make" $make_complete)
+
+NASHCOMPLETE_CMD <= append($NASHCOMPLETE_CMD, $dockercomplete)
+NASHCOMPLETE_CMD <= append($NASHCOMPLETE_CMD, $sshcomplete)
+NASHCOMPLETE_CMD <= append($NASHCOMPLETE_CMD, $makecomplete)
