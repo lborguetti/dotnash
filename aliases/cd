@@ -1,7 +1,9 @@
-# cd alias
+#!/usr/bin/env nash
 
-# cd overrides built-in cd
-# looks for directories in CDPATH variable
+#
+# cd: overrides built-in cd, looks for directories in CDPATH variable
+#
+
 fn __docd(path) {
 	chdir($path)
 }
@@ -9,39 +11,39 @@ fn __docd(path) {
 fn cd(path) {
 	if $path == "" {
 		__docd($HOME)
-
+		
 		return
 	}
 
-	out, status <= echo $path | grep "^/" >[1=]
+	var _, status <= echo $path | grep "^/" >[1=]
 
 	if $status != "0" {
 		pwd <= pwd | tr -d "\n"
-
-		newpath = $pwd+"/"+$path
-
-		out, status <= test -d $newpath
-
+		
+		var newpath = $pwd+"/"+$path
+		
+		var _, status <= test -d $newpath
+		
 		if $status == "0" {
 			__docd($newpath)
-
+			
 			return
 		}
-
+		
 		for prefix in $CDPATH {
 			newpath = $prefix+"/"+$path
-
-			out, status <= test -d $newpath
-
+		
+			var _, status <= test -d $newpath
+		
 			if $status == "0" {
 				__docd($newpath)
-
+				
 				return
 			}
 		}
 	}
 
-	path, status <= echo -n $path | sed "s#^~#"+$HOME+"#g" | tr -d "\n"
+	var path, status <= echo -n $path | sed "s#^~#"+$HOME+"#g" | tr -d "\n"
 
 	__docd($path)
 }

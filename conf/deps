@@ -1,14 +1,18 @@
+#!/usr/bin/env nash
+
+#
 # Download any required dependencies
+#
 
 fn getnashlib() {
-	-test -d $NASHPATH+"/lib/nashlib"
+	var _, status <= test -d $NASHPATH+"/lib/nashlib"
 
 	if $status != "0" {
 		# After install nashlib, you can use color variables instead of
 		# adding explicit ANSI escape sequences...
 		echo "[31m» nashlib not installed[0m"
 		echo "[32m» Trying to download dependencies...[0m"
-		-mkdir -p $NASHPATH+"/lib"
+		mkdir -p $NASHPATH+"/lib"
 
 		chdir($NASHPATH+"/lib")
 
@@ -19,7 +23,7 @@ fn getnashlib() {
 }
 
 fn getfzf() {
-	-test -d $HOME+"/.fzf"
+	var _, status <= test -d $HOME+"/.fzf"
 
 	if $status != "0" {
 		echo "fzf fuzzy finder not installed."

@@ -1,22 +1,26 @@
+#!/usr/bin/env nash
+
+#
 # auto complete
+#
 
 import "nashcomplete/all"
 
-# The `parts` argument hold the line splited by space.
+var docker_cmds = "attach build commit cp create diff events exec export history images import info inspect kill load login logout logs pause port ps pull push rename restart rm rmi run save search start stats stop tag top unpause update version wait"
+
 fn docker_complete(parts, line, pos) {
-	ret = ()
+	var ret = ()
 
-	partsz <= len($parts)
+	var partsz <= len($parts)
 
-	if $partsz != "1" {
-		# only autocomplete the subcommand
+	if $partsz != "2" {
 		return $ret
 	}
 
-	choice <= (
-		echo "attach build commit cp create diff events exec export history images import info inspect kill load login logout logs network node pause port ps pull push rename restart rm rmi run save search service start stats stop swarm tag top unpause update version volume wait" |
+	choice, status <= (
+		echo $docker_cmds |
 		tr " " "\n" |
-		-fzf --header "Docker subcommands: "
+		fzf --header "Docker commands: "
 						--reverse
 						 |
 		tr -d "\n"
@@ -31,6 +35,6 @@ fn docker_complete(parts, line, pos) {
 	return $ret
 }
 
-dockercomplete = ("docker" $docker_complete)
+var dockercomplete = ("docker" $docker_complete)
 
 NASHCOMPLETE_CMD <= append($NASHCOMPLETE_CMD, $dockercomplete)

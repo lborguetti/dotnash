@@ -1,29 +1,31 @@
-# prompt
+#!/usr/bin/env nash
 
-# PROMPT is a special variable used by nash command line to
-# setup your prompt.
-DEFPROMPT = $NASH_FG_LRED+"❯"+$NASH_FG_LYELLOW+"❯"+$NASH_FG_LGREEN+"❯ "+$NASH_RESET
-PROMPT    = $DEFPROMPT
+#
+# PROMPT: is a special variable used by nash command  line to setup your prompt.
+#
+var defprompt = $NASH_FG_LRED+"❯"+$NASH_FG_LYELLOW+"❯"+$NASH_FG_LGREEN+"❯ "+$NASH_RESET
 
-setenv PROMPT
+setenv PROMPT = $defprompt
 
 fn updatePrompt() {
-	current_dir, status <= pwd | sed -e "s@"+$HOME+"@~@g;s@/data/Home@~@g;s@/data/Work@~/Work@g"
+	var current_dir, status <= pwd | sed -e "s@"+$HOME+"@~@g;s@/data/Home@~@g;s@/data/Work@~/Work@g"
 
 	if $status == "0" {
-		out       <= split($current_dir, "/")
-		len_out   <= len($out)
-		_, status <= test $len_out -ge "3"
+		var out <= split($current_dir, "/")
+		var len_out <= len($out)
+		var _, status <= test $len_out -ge "3"
 
 		if $status == "0" {
 			current_dir = ""
 
-			last_cut <= expr $len_out - 2
-			seq      <= seq 0 $last_cut
-			range    <= split($seq, "\n")
+			var dir = ""
+
+			var last_cut <= expr $len_out - 2
+			var seq <= seq 0 $last_cut
+			var range <= split($seq, "\n")
 
 			for r in $range {
-				_, status <= echo $out[$r] | grep "^\\."
+				var _, status <= echo $out[$r] | grep "^\\."
 
 				if $status == "0" {
 					dir <= echo $out[$r] | cut -c 1-2
@@ -34,7 +36,7 @@ fn updatePrompt() {
 				current_dir = $current_dir+$dir+"/"
 			}
 
-			last <= expr $len_out - 1
+			var last <= expr $len_out - 1
 
 			current_dir = $current_dir+$out[$last]
 		}
@@ -42,25 +44,18 @@ fn updatePrompt() {
 		current_dir = $NASH_FG_LBLUE+$current_dir+$NASH_RESET
 	}
 
-	branch, status <= git rev-parse --abbrev-ref HEAD >[2=]
+	var branch, status <= git rev-parse --abbrev-ref HEAD >[2=]
 
 	if $status == "0" {
-		# workaround nash issue #96
-		branch <= echo -n $branch | xargs echo -n
-
-		git_prompt = "git:("+$NASH_RED+$branch+$NASH_RESET+")"
-		PROMPT     = $current_dir+" "+$git_prompt+" "+$DEFPROMPT
+		var git_prompt = "git:("+$NASH_RED+$branch+$NASH_RESET+")"
+		var prompt = $current_dir+" "+$git_prompt+" "+$defprompt
 	} else {
-		PROMPT = $current_dir+" "+$DEFPROMPT
+		var prompt = $current_dir+" "+$defprompt
 	}
 
-	setenv PROMPT
+	setenv PROMPT = $prompt
 }
 
 fn nash_repl_before() {
-	updatePrompt()
-}
-
-fn nash_repl_after(line, status) {
 	updatePrompt()
 }

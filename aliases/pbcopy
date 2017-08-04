@@ -1,13 +1,17 @@
+#!/usr/bin/env nash
+
+#
 # pbcopy alias
+#
 
 fn pbcopy(filename) {
-	current_dir, status <= pwd
+	var current_dir, status <= pwd
 
 	if $status != "0" {
-		exit("1")
+		return
 	}
 
-	file = $current_dir+"/"+$filename
+	var file = $current_dir+"/"+$filename
 
 	cat $file | xsel --clipboard --input
 }
