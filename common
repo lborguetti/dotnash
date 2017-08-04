@@ -1,4 +1,8 @@
+#!/usr/bin/env nash
+
+#
 # common functions
+#
 
 fn dotnash_clean() {
         rm -rf $NASHPATH + "/lib"
