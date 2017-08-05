@@ -1,0 +1,48 @@
+#!/usr/bin/env nash
+
+#
+# myip alias
+#
+
+fn myip(type) {
+	fn _error(type, status, err) {
+		print("Failed to get %s ip address. status[%s], error[%s]\n", $type, $status, $err)
+
+		return
+	}
+
+	if $type == "public" {
+		ipaddress, status <= (
+			dig TXT "+short" o-o.myaddr.l.google.com @ns1.google.com |
+			sed "s@\"@@g"
+		)
+
+		if $status == "0" {
+			print("Public ip address: %s\n", $ipaddress)
+
+			return
+		} else {
+			_error($type, $status, $ipaddress)
+		}
+	}
+	if $type == "private" {
+		out, status <= (ip route show | grep default)
+
+		if $status == "0" {
+			_out <= split($out, " ")
+
+			interface = $_out[4]
+			ipaddress = $_out[6]
+
+			print("Interface: %s\nPrivate ip address: %s\n", $interface, $ipaddress)
+
+			return
+		} else {
+			_error($type, $status, $out)
+		}
+	}
+
+	print("Usage: myip [public|private]\n")
+}
+
+bindfn myip myip
